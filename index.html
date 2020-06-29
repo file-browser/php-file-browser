@@ -6,11 +6,9 @@
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./assets/app.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" charset="utf-8"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-file-download@1.4.6/src/Scripts/jquery.fileDownload.js" charset="utf-8"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js" charset="utf-8"></script>
-    <script src="./assets/app.js" charset="utf-8"></script>
     <template id="list_dir">
       <tr>
         <th scope="row" onclick="opendir('{{__PATH__}}')" colspan="2">
@@ -110,6 +108,73 @@
       Powered by <a href="https://github.com/file-browser/php-file-browser">File Browser</a>
     </p>
     <!-- ./BOTTOM -->
+
+    <script type="text/javascript">
+      var loading;
+      var loading_counter = 0;
+      var loading_text;
+      var nav = '';
+      var list;
+
+      $(function(){
+        loading_text = $('#loading').html();
+        loading = setInterval(function(){
+          if (loading_counter >= 3) {
+            loading_counter = 0;
+            $('#loading').html(loading_text);
+          }else{
+            $('#loading').html($('#loading').html() + '.');
+          }
+          loading_counter ++;
+        }, 200);
+        $.getJSON('./assets/map.json', function(data){
+          clearInterval(loading);
+          $('#loading').hide();
+          list = data;
+          console.log(list);
+          opendir();
+        });
+      });
+
+      function opendir(path = '') {
+        console.log('open: ' + path);
+        $('#list').html('');
+        if (path == '') {
+          arr = list;
+          $('#nav').html('当前位置：' + $('#nav_item').html().replace('{{__NAME__}}', '根目录').replace('{{__PATH__}}', ''));
+        }else{
+          var sp = path.split('/');
+          var arr = list;
+          var nav_path = '';
+          var nav_item = '';
+          $('#nav').html('当前位置：' + $('#nav_item').html().replace('{{__NAME__}}', '根目录').replace('{{__PATH__}}', ''));
+          $.each(sp, function(key, value){
+            nav_path = (nav_path == '' ? nav_path : nav_path + '/') + value;
+            nav_item = '/ ' + value;
+            $('#nav').html($('#nav').html() + $('#nav_item').html().replace('{{__NAME__}}', nav_item).replace('{{__PATH__}}', nav_path));
+            arr = arr[value];
+          });
+        }
+        $.each(arr, function(key, value) {
+          if (typeof value == 'object' || Array.isArray(value)) {
+            tpl = $('#list_dir').html();
+            tpl = tpl.replace(/{{__ICON__}}/g, 'fa-folder');
+            tpl = tpl.replace(/{{__PATH__}}/g, (path == '' ? path : path + '/') + key);
+            tpl = tpl.replace(/{{__NAME__}}/g, key);
+            $('#list').append(tpl);
+          }
+        });
+        $.each(arr, function(key, value) {
+          if (typeof value != 'object' && !Array.isArray(value)) {
+            tpl = $('#list_item').html();
+            tpl = tpl.replace(/{{__ICON__}}/g, 'fa-file');
+            tpl = tpl.replace(/{{__PATH__}}/g, (path == '' ? './' : './' + path + '/') + value);
+            tpl = tpl.replace(/{{__NAME__}}/g, value);
+            $('#list').append(tpl);
+          }
+        });
+      }
+    </script>
 
   </body>
 </html>
