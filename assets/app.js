@@ -49,13 +49,17 @@ function opendir(path = '') {
       tpl = tpl.replace(/{{__ICON__}}/g, 'fa-folder');
       tpl = tpl.replace(/{{__PATH__}}/g, (path == '' ? path : path + '/') + key);
       tpl = tpl.replace(/{{__NAME__}}/g, key);
-    }else{
+      $('#list').append(tpl);
+    }
+  });
+  $.each(arr, function(key, value) {
+    if (typeof value != 'object' && !Array.isArray(value)) {
       tpl = $('#list_item').html();
       tpl = tpl.replace(/{{__ICON__}}/g, 'fa-file');
       tpl = tpl.replace(/{{__PATH__}}/g, (path == '' ? './' : './' + path + '/') + value);
       tpl = tpl.replace(/{{__NAME__}}/g, value);
+      $('#list').append(tpl);
     }
-    $('#list').append(tpl);
   });
 }
 
