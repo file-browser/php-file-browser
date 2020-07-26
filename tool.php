@@ -1,4 +1,7 @@
 <?php
+// 检测运行模式
+define('IS_CLI', php_sapi_name() == 'cli');
+
 // 读取配置文件
 $config = parse_ini_file('./.config');
 /**
@@ -45,8 +48,12 @@ if (isset($config['akm_text'])) {
   $tpl = str_replace('{{__AKM_TEXT__}}', $config['akm_text'], $tpl);
 }
 
-// 生成静态文件
-file_put_contents('./index.html', $tpl);
+// 生成静态文件与运行
+if (IS_CLI === FALSE) {
+  echo $tpl;
+}else{
+  file_put_contents('./index.html', $tpl);
+}
 
 /**
  * 目录遍历
