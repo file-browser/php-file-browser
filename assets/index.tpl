@@ -13,6 +13,9 @@
       a {
         text-decoration: none;
       }
+      a:hover {
+        text-decoration: none;
+      }
     </style>
     <template id="list_dir">
       <tr>
@@ -37,19 +40,27 @@
         </td>
       </tr>
     </template>
+    <!-- 视频播放按钮 -->
     <template id="list_item_video">
       <a href="javascript:;" onclick="play('{{__PATH__}}', '{{__NAME__}}');">
         <i class="fas fa-play fa-fw"></i>
       </a>
     </template>
+    <!-- ./视频播放按钮 -->
+
+    <!-- ./播放按钮 -->
     <template id="list_item_audio">
       <a href="javascript:;" onclick="play_audio('{{__PATH__}}', '{{__NAME__}}');">
         <i class="fas fa-play fa-fw"></i>
       </a>
     </template>
+    <!-- ./音频播放按钮 -->
+
+    <!-- 导航 -->
     <template id="nav_item">
       <a href="javascript:;" onclick="opendir('{{__PATH__}}')">{{__NAME__}}</a>
     </template>
+    <!-- ./导航 -->
   </head>
   <body>
     <!-- TITLE -->
@@ -108,7 +119,7 @@
               项目地址：<a href="{{__AKM_LINK__}}" target="_blank">{{__AKM_TEXT__}}</a>
             </li>
             <li>
-              当前版本：<img src="https://img.shields.io/badge/tag-v1.1.0-orange"/>
+              当前版本：<img src="https://img.shields.io/badge/tag-v1.2.0-orange"/>
             </li>
             <li>
               最新版本：<img src="https://img.shields.io/github/v/tag/file-browser/php-file-browser?style=flat-square"/>
@@ -169,6 +180,8 @@
       var loading_text;
       var nav = '';
       var list;
+      var w_path = window.location.hash;
+      console.log(w_path);
 
       $(function(){
         loading_text = $('#loading').html();
@@ -186,7 +199,7 @@
           $('#loading').hide();
           list = data;
           console.log(list);
-          opendir();
+          opendir(w_path);
         });
         // 关闭播放器时停止播放视频
         $('#player').on('hide.bs.modal', function() {
@@ -199,7 +212,9 @@
       });
 
       function opendir(path = '') {
+        path = path.substring(0, 1) == '#' ? path.substring(2) : path;
         console.log('open: ' + path);
+        location.href = '#/' + path;
         $('#list').html('');
         if (path == '') {
           arr = list;
