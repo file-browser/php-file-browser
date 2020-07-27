@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" charset="utf-8"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-file-download@1.4.6/src/Scripts/jquery.fileDownload.js" charset="utf-8"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js" charset="utf-8"></script>
-    <style media="screen">
+    <style media="screen" type="text/css">
       a {
         text-decoration: none;
       }
@@ -32,14 +32,21 @@
           {{__NAME__}}
         </th>
         <td>
-          <a href="{{__PATH__}}" download="{{__NAME__}}">
-            <i class="fas fa-download fa-fw"></i>
-          </a>
+          {{__DOWNLOAD__}}
           {{__VIDEO__}}
           {{__AUDIO__}}
         </td>
       </tr>
     </template>
+
+    <!-- 下载按钮 -->
+    <template id="list_item_download">
+      <a href="{{__PATH__}}" download="{{__NAME__}}">
+        <i class="fas fa-download fa-fw"></i>
+      </a>
+    </template>
+    <!-- ./下载按钮 -->
+
     <!-- 视频播放按钮 -->
     <template id="list_item_video">
       <a href="javascript:;" onclick="play('{{__PATH__}}', '{{__NAME__}}');">
@@ -119,7 +126,7 @@
               项目地址：<a href="{{__AKM_LINK__}}" target="_blank">{{__AKM_TEXT__}}</a>
             </li>
             <li>
-              当前版本：<img src="https://img.shields.io/badge/tag-v1.2.0-orange"/>
+              当前版本：<img src="https://img.shields.io/badge/tag-v1.2.1-orange"/>
             </li>
             <li>
               最新版本：<img src="https://img.shields.io/github/v/tag/file-browser/php-file-browser?style=flat-square"/>
@@ -181,9 +188,18 @@
       var nav = '';
       var list;
       var w_path = window.location.hash;
+      var video_download_btn = {{__VIDEO_DOWNLOAD_BTN__}};
+      var audio_download_btn = {{__AUDIO_DOWNLOAD_BTN__}};
       console.log(w_path);
 
       $(function(){
+        // css-download-btn
+        if (video_download_btn === false) {
+          $('#player_v').attr('controlsList', 'nodownload');
+        }
+        if (audio_download_btn === false) {
+          $('#audio_player_a').attr('controlsList', 'nodownload');
+        }
         loading_text = $('#loading').html();
         loading = setInterval(function(){
           if (loading_counter >= 3) {
@@ -244,7 +260,6 @@
         });
         // 显示文件
         $.each(arr, function(key, value) {
-          console.log(value);
           if (typeof value != 'object' && !Array.isArray(value)) {
             tpl = $('#list_item').html();
             tpl = tpl.replace(/{{__ICON__}}/g, 'fa-file');
@@ -253,7 +268,6 @@
             // 判断是否为mp4文件
             ext = value.split('.');
             ext = ext.pop();
-            console.log(ext);
             // 视频
             if (ext == 'mp4' || ext == 'mkv') {
               // 增加播放按钮
@@ -261,6 +275,15 @@
               v = v.replace(/{{__PATH__}}/g, (path == '' ? './' : './' + path + '/') + value);
               v = v.replace(/{{__NAME__}}/g, value);
               tpl = tpl.replace(/{{__VIDEO__}}/g, v);
+              // 下载按钮处理
+              if (video_download_btn === true) {
+                download = $('#list_item_download').html();
+                download = download.replace(/{{__PATH__}}/g, (path == '' ? './' : './' + path + '/') + value);
+                download = download.replace(/{{__NAME__}}/g, value);
+                tpl = tpl.replace(/{{__DOWNLOAD__}}/g, download);
+              }else{
+                tpl = tpl.replace(/{{__DOWNLOAD__}}/g, '');
+              }
             }else{
               tpl = tpl.replace(/{{__VIDEO__}}/g, '');
             }
@@ -271,9 +294,28 @@
               v = v.replace(/{{__PATH__}}/g, (path == '' ? './' : './' + path + '/') + value);
               v = v.replace(/{{__NAME__}}/g, value);
               tpl = tpl.replace(/{{__AUDIO__}}/g, v);
+              // 下载按钮处理
+              if (audio_download_btn === true) {
+                download = $('#list_item_download').html();
+                download = download.replace(/{{__PATH__}}/g, (path == '' ? './' : './' + path + '/') + value);
+                download = download.replace(/{{__NAME__}}/g, value);
+                tpl = tpl.replace(/{{__DOWNLOAD__}}/g, download);
+              }else{
+                tpl = tpl.replace(/{{__DOWNLOAD__}}/g, '');
+              }
             }else{
               tpl = tpl.replace(/{{__AUDIO__}}/g, '');
             }
+
+            // 下载按钮最终处理
+            if (ext != 'mp3' && ext != 'ogg' && ext != 'mp4' && ext != 'mkv') {
+              console.log(ext);
+              download = $('#list_item_download').html();
+              download = download.replace(/{{__PATH__}}/g, (path == '' ? './' : './' + path + '/') + value);
+              download = download.replace(/{{__NAME__}}/g, value);
+              tpl = tpl.replace(/{{__DOWNLOAD__}}/g, download);
+            }
+
             $('#list').append(tpl);
           }
         });

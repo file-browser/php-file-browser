@@ -40,6 +40,20 @@ if (isset($config['subtitle_text'])) {
   $tpl = str_replace('{{__SUBTITLE_TEXT__}}', $config['subtitle_text'], $tpl);
 }
 
+// 视频下载按钮显示
+if (isset($config['video_download_btn']) && $config['video_download_btn'] === '') {
+  $tpl = str_replace('{{__VIDEO_DOWNLOAD_BTN__}}', 'false', $tpl);
+}else{
+  $tpl = str_replace('{{__VIDEO_DOWNLOAD_BTN__}}', 'true', $tpl);
+}
+
+// 音频下载按钮显示
+if (isset($config['audio_download_btn']) && $config['audio_download_btn'] === '') {
+  $tpl = str_replace('{{__AUDIO_DOWNLOAD_BTN__}}', 'false', $tpl);
+}else{
+  $tpl = str_replace('{{__AUDIO_DOWNLOAD_BTN__}}', 'true', $tpl);
+}
+
 // 关于与鸣谢
 if (isset($config['akm_link'])) {
   $tpl = str_replace('{{__AKM_LINK__}}', $config['akm_link'], $tpl);
