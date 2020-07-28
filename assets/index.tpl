@@ -16,6 +16,9 @@
       a:hover {
         text-decoration: none;
       }
+      .list-30 > li {
+        line-height: 30px;
+      }
     </style>
     <template id="list_dir">
       <tr>
@@ -49,7 +52,7 @@
 
     <!-- 视频播放按钮 -->
     <template id="list_item_video">
-      <a href="javascript:;" onclick="play('{{__PATH__}}', '{{__NAME__}}');">
+      <a href="javascript:void(0);" onclick="play('{{__PATH__}}', '{{__NAME__}}');">
         <i class="fas fa-play fa-fw"></i>
       </a>
     </template>
@@ -57,7 +60,7 @@
 
     <!-- ./播放按钮 -->
     <template id="list_item_audio">
-      <a href="javascript:;" onclick="play_audio('{{__PATH__}}', '{{__NAME__}}');">
+      <a href="javascript:void(0);" onclick="play_audio('{{__PATH__}}', '{{__NAME__}}');">
         <i class="fas fa-play fa-fw"></i>
       </a>
     </template>
@@ -65,14 +68,14 @@
 
     <!-- 导航 -->
     <template id="nav_item">
-      <a href="javascript:;" onclick="opendir('{{__PATH__}}')">{{__NAME__}}</a>
+      <a href="javascript:void(0);" onclick="opendir('{{__PATH__}}')">{{__NAME__}}</a>
     </template>
     <!-- ./导航 -->
   </head>
   <body>
     <!-- TITLE -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="javascript:;">{{__TITLE__}}</a>
+      <a class="navbar-brand" href="javascript:void(0);">{{__TITLE__}}</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -106,9 +109,6 @@
                 <tbody id="list">
                 </tbody>
               </table>
-              <div id="loading">
-                载入文件列表中，请稍候
-              </div>
             </div>
           </div>
         </div>
@@ -121,12 +121,12 @@
           <div class="card-title">
             <h5>关于与鸣谢</h5>
           </div>
-          <ul class="nya-list">
+          <ul class="list-30">
             <li>
               项目地址：<a href="{{__AKM_LINK__}}" target="_blank">{{__AKM_TEXT__}}</a>
             </li>
             <li>
-              当前版本：<img src="https://img.shields.io/badge/tag-v1.2.1-orange"/>
+              当前版本：<img src="https://img.shields.io/badge/tag-v1.3.0-orange"/>
             </li>
             <li>
               最新版本：<img src="https://img.shields.io/github/v/tag/file-browser/php-file-browser?style=flat-square"/>
@@ -182,17 +182,19 @@
     </div>
     <!-- ./Audio Player -->
     <script type="text/javascript">
-      var loading;
-      var loading_counter = 0;
-      var loading_text;
+      var map = "{{__MAP__}}";
       var nav = '';
       var list;
       var w_path = window.location.hash;
       var video_download_btn = {{__VIDEO_DOWNLOAD_BTN__}};
       var audio_download_btn = {{__AUDIO_DOWNLOAD_BTN__}};
-      console.log(w_path);
+      console.log(map);
 
       $(function(){
+        // map载入
+        list = $.parseJSON(map);
+        // 打开目录
+        opendir(w_path);
         // css-download-btn
         if (video_download_btn === false) {
           $('#player_v').attr('controlsList', 'nodownload');
@@ -200,31 +202,14 @@
         if (audio_download_btn === false) {
           $('#audio_player_a').attr('controlsList', 'nodownload');
         }
-        loading_text = $('#loading').html();
-        loading = setInterval(function(){
-          if (loading_counter >= 3) {
-            loading_counter = 0;
-            $('#loading').html(loading_text);
-          }else{
-            $('#loading').html($('#loading').html() + '.');
-          }
-          loading_counter ++;
-        }, 200);
-        $.getJSON('./assets/map.json', function(data){
-          clearInterval(loading);
-          $('#loading').hide();
-          list = data;
-          console.log(list);
-          opendir(w_path);
-        });
         // 关闭播放器时停止播放视频
         $('#player').on('hide.bs.modal', function() {
           $('#player_v').trigger('pause');
-        })
+        });
         // 关闭播放器时停止播放音频
         $('#audio_player').on('hide.bs.modal', function() {
           $('#audio_player_a').trigger('pause');
-        })
+        });
       });
 
       function opendir(path = '') {
@@ -309,7 +294,6 @@
 
             // 下载按钮最终处理
             if (ext != 'mp3' && ext != 'ogg' && ext != 'mp4' && ext != 'mkv') {
-              console.log(ext);
               download = $('#list_item_download').html();
               download = download.replace(/{{__PATH__}}/g, (path == '' ? './' : './' + path + '/') + value);
               download = download.replace(/{{__NAME__}}/g, value);
