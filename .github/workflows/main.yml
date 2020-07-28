@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@main
 
       - name: build
         run: php tool.php
