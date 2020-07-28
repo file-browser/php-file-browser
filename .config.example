@@ -1,0 +1,51 @@
+; 基础设置
+[Standard]
+
+; 扫描目录
+; 相对路径基于调用程序
+; 默认值："."
+dir = "."
+
+; 过滤文件与文件夹
+; 仅支持根目录排除
+except = assets, .github, index.html, tool.php, map.json, .gitignore, README.md, .config, .config.example
+
+
+; 界面设置
+[UI]
+
+; 标题
+title = File Browser
+
+; 子标题
+subtitle_link = https://github.com/file-browser/php-file-browser
+subtitle_text = file-browser/php-file-browser
+
+; 关于与鸣谢
+akm_link = https://github.com/file-browser/php-file-browser
+akm_text = file-browser/php-file-browser
+
+
+
+; 其他设置
+[Others]
+
+; 视频下载按钮显示
+; 可选配置：yes, no
+video_download_btn = yes
+
+; 音频下载按钮显示
+; 可选配置：yes, no
+audio_download_btn = yes
+
+; 压缩页面
+; 静态模式建议开启
+; 压缩页面不会影响显示效果，仅在运行时消耗少量的性能
+compress = yes
+
+; 核心参数
+; 请勿修改以下参数，避免出现不可预知的错误
+[Core]
+
+; 配置文件版本
+cfg_ver = 1
