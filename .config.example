@@ -28,7 +28,7 @@ remote_tpl_path = "https://raw.githubusercontent.com/file-browser/php-file-brows
 
 ; 静态文件(index.html)保存位置
 ; 建议与调用位置相对
-static_file = "./a/index.html"
+static_file = "./index.html"
 
 
 
