@@ -1,7 +1,7 @@
 <?php
 
 // 当前版本
-define('VERSION', '1.3.1');
+define('VERSION', '1.3.2');
 
 // 配置文件需求版本
 define('CFG_VERSION', 1);
@@ -15,12 +15,12 @@ if( version_compare(PHP_VERSION, "7.0.0", "<") ){
 define('IS_CLI', php_sapi_name() == 'cli');
 
 // 读取配置文件
-if (file_exists('./.config')) {
+if (file_exists(__DIR__.'/.config')) {
   // 读取自定义配置
-  $config = parse_ini_file('./.config');
-}else if(file_exists('./.config.example')){
+  $config = parse_ini_file(__DIR__.'/.config');
+}else if(file_exists(__DIR__.'/.config.example')){
   // 读取默认配置
-  $config = parse_ini_file('./.config.example');
+  $config = parse_ini_file(__DIR__.'/.config.example');
 }else{
   // 无配置文件
   exit('Config file needed.');
