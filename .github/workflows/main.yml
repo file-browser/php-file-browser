@@ -24,6 +24,20 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH: gh-pages
           FOLDER: .
+        env:
+          FB_DIR: ${{ secrets.FB_DIR }}
+          FB_EXCEPT: ${{ secrets.FB_EXCEPT }}
+          FB_TPL_PATH: ${{ secrets.FB_TPL_PATH }}
+          FB_REMOTE_TPL_ALLOW: ${{ secrets.FB_REMOTE_TPL_ALLOW }}
+          FB_REMOTE_TPL_PATH: ${{ secrets.FB_REMOTE_TPL_PATH }}
+          FB_STATIC_FILE: ${{ secrets.FB_STATIC_FILE }}
+          FB_TITLE: ${{ secrets.FB_TITLE }}
+          FB_SUBTITLE_LINK: ${{ secrets.FB_SUBTITLE_LINK }}
+          FB_SUBTITLE_TEXT: ${{ secrets.FB_SUBTITLE_TEXT }}
+          FB_AKM_LINK: ${{ secrets.FB_AKM_LINK }}
+          FB_VIDEO_DONWLOAD_BTN: ${{ secrets.FB_VIDEO_DONWLOAD_BTN }}
+          FB_AUDIO_DONWLOAD_BTN: ${{ secrets.FB_AUDIO_DONWLOAD_BTN }}
+          FB_COMPRESS: ${{ secrets.FB_COMPRESS }}
 
 
 

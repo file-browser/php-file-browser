@@ -1,5 +1,11 @@
 <?php
 
+// 当前版本
+define('VERSION', '1.3.1');
+
+// 配置文件需求版本
+define('CFG_VERSION', 1);
+
 // 版本判断
 if( version_compare(PHP_VERSION, "7.0.0", "<") ){
   exit("PHP Version >= 7.0 needed.");
@@ -16,12 +22,12 @@ if (file_exists('./.config')) {
   // 读取默认配置
   $config = parse_ini_file('./.config.example');
 }else{
-  // 空配置
-  $config = [];
+  // 无配置文件
+  exit('Config file needed.');
 }
 
 // 检查配置文件版本
-if (!isset($config['cfg_ver']) || $config['cfg_ver'] < 1) {
+if (!isset($config['cfg_ver']) || CFG_VERSION < 1) {
   exit('不支持的配置文件（配置文件版本过低）');
 }
 
@@ -55,10 +61,34 @@ $dirs = json_encode($dirs);
 $map = str_replace('"', '\"', $dirs);
 
 // 读取模板
-$tpl = file_get_contents('./assets/index.tpl');
+if (file_exists($config['tpl_path'])) {
+  $tpl = file_get_contents('./assets/index.tpl');
+}else if( isset($config['remote_tpl_allow']) && $config['remote_tpl_allow'] !== '' ){
+  // 尝试获取远程模板
+  $error = 'Fetch remote template file error.';
+  $url = isset($config['remote_tpl_path']) && $config['remote_tpl_path'] !== '' ? $config['remote_tpl_path'].'/'.VERSION.'/'.'index.tpl' : exit($error);
+  $ch = curl_init($url);
+  curl_setopt($ch, CURLOPT_HEADER, FALSE);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+  $res = curl_exec($ch);
+  $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  if ($httpCode === 200) {
+    $tpl = $res;
+  }else{
+    exit($error);
+  }
+}else{
+  exit('Template file needed.');
+}
 
 // map
 $tpl = str_replace('{{__MAP__}}', $map, $tpl);
+
+// version
+$tpl = str_replace('{{__VERSION__}}', VERSION, $tpl);
 
 // 标题设置
 if (isset($config['title'])) {
@@ -107,7 +137,8 @@ if (IS_CLI === FALSE) {
   echo $tpl;
 }else{
   // 相对路径不允许设置index.html保存位置
-  file_put_contents('./index.html', $tpl);
+  $filename = isset($config['static_file']) && $config['static_file'] !== '' ? $config['static_file'] : './index.html';
+  file_put_contents($filename, $tpl);
 }
 
 /**
