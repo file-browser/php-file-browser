@@ -2,13 +2,34 @@
 [Standard]
 
 ; 扫描目录
-; 相对路径基于调用程序
+; 建议与调用位置相对
 ; 默认值："."
 dir = "."
 
 ; 过滤文件与文件夹
 ; 仅支持根目录排除
 except = assets, .github, index.html, tool.php, map.json, .gitignore, README.md, .config, .config.example
+
+; 模板设置
+; 当无法读取本地模板路径时将尝试调用远程模板路径
+; 均调用失败时将终止程序
+
+; 本地模板路径
+; 建议与调用位置相对
+tpl_path = "./assets/index.tpl"
+
+; 是否开启远程模板获取
+; 远程模板仅作获取，不会保存在本地
+remote_tpl_allow = yes
+
+; 远程模板基础路径
+; 实际访问基础路径/[当前版本]/[模板文件].tpl
+remote_tpl_path = "https://raw.githubusercontent.com/file-browser/php-file-browser-templates/master"
+
+; 静态文件(index.html)保存位置
+; 建议与调用位置相对
+static_file = "./a/index.html"
+
 
 
 ; 界面设置

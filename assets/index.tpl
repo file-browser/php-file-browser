@@ -126,7 +126,7 @@
               项目地址：<a href="{{__AKM_LINK__}}" target="_blank">{{__AKM_TEXT__}}</a>
             </li>
             <li>
-              当前版本：<img src="https://img.shields.io/badge/tag-v1.3.0-orange"/>
+              当前版本：<img src="https://img.shields.io/badge/tag-v{{__VERSION__}}-orange"/>
             </li>
             <li>
               最新版本：<img src="https://img.shields.io/github/v/tag/file-browser/php-file-browser?style=flat-square"/>
