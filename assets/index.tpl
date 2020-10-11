@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" charset="utf-8"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-file-download@1.4.6/src/Scripts/jquery.fileDownload.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-file-download@1.4.6/src/Scripts/jquery.fileDownload.js" charset="utf-8"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" charset="utf-8"></script>
     <style media="screen" type="text/css">
       a {
         text-decoration: none;
@@ -44,6 +46,9 @@
 
     <!-- 下载按钮 -->
     <template id="list_item_download">
+      <a href="javascript:;" class="clipboard" data-clipboard-text="{{__COPY__}}">
+        <i class="fas fa-copy fa-fw"></i>
+      </a>
       <a href="{{__PATH__}}" download="{{__NAME__}}">
         <i class="fas fa-download fa-fw"></i>
       </a>
@@ -188,9 +193,15 @@
       var w_path = window.location.hash;
       var video_download_btn = {{__VIDEO_DOWNLOAD_BTN__}};
       var audio_download_btn = {{__AUDIO_DOWNLOAD_BTN__}};
+      var BASEURL = "";
+
       console.log(map);
 
       $(function(){
+        // 计算baseurl
+        let baseurl = location.href;
+        baseurl = baseurl.replace(/[\?|#].+$/, '');
+        BASEURL = baseurl.match(/^.*\//u);
         // map载入
         list = $.parseJSON(map);
         // 打开目录
@@ -210,6 +221,8 @@
         $('#audio_player').on('hide.bs.modal', function() {
           $('#audio_player_a').trigger('pause');
         });
+        // 剪贴板插件
+      	clipboard = new ClipboardJS('.clipboard');
       });
 
       function opendir(path = '') {
@@ -297,6 +310,7 @@
               download = $('#list_item_download').html();
               download = download.replace(/{{__PATH__}}/g, (path == '' ? './' : './' + path + '/') + value);
               download = download.replace(/{{__NAME__}}/g, value);
+              download = download.replace(/{{__COPY__}}/g, BASEURL + (path == '' ? '' : path + '/') + value);
               tpl = tpl.replace(/{{__DOWNLOAD__}}/g, download);
             }
 
