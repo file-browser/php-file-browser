@@ -1,7 +1,7 @@
 <?php
 
 // 当前版本
-define('VERSION', '1.3.2');
+define('VERSION', '1.3.3');
 
 // 配置文件需求版本
 define('CFG_VERSION', 1);
