@@ -207,7 +207,7 @@ function scan(string $path, array $except = [], bool $recurse = false) : array {
  * @param  string version
  * @return string
  */
-function fetch_remote_tpl(string $base_url, string &$error, string $version = TPL_VERSION) : string {
+function fetch_remote_tpl(string $baseurl, string &$error, string $version = TPL_VERSION) : string {
   // 初始化模板
   $tpl = "";
   // 初始化错误提示：无错误
