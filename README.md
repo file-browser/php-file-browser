@@ -6,7 +6,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/file-browser/php-file-browser?style=flat-square)](https://github.com/file-browser/php-file-browser/issues)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/file-browser/php-file-browser?style=flat-square)
 
-![DEMO](https://cdn.jsdelivr.net/gh/file-browser/pages@latest/demo_1.4.0.png)
+![DEMO](https://cdn.jsdelivr.net/gh/file-browser/pages@latest/demo_2.0.0.png)
 
 ## 特性介绍
 
