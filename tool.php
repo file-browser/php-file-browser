@@ -165,11 +165,7 @@ if (IS_CLI === FALSE) {
 }else{
   // 相对路径不允许设置index.html保存位置
   $filename = isset($config['static_file']) && !empty($config['static_file']) ? $config['static_file'] : './index.html';
-  if (is_writable($filename)){
-    file_put_contents($filename, $tpl);
-  }else{
-    exit('Unwritable path: ' . $filename);
-  }
+  file_put_contents($filename, $tpl);
 }
 
 /**
