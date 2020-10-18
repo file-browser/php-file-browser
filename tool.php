@@ -1,7 +1,10 @@
 <?php
 
 // 当前版本
-define('VERSION', '1.3.3');
+define('VERSION', '1.4.0');
+
+// 远程模板版本
+define('TPL_VERSION', '1.4.0');
 
 // 配置文件需求版本
 define('CFG_VERSION', 1);
@@ -64,21 +67,34 @@ $map = str_replace('"', '\"', $dirs);
 if (file_exists($config['tpl_path'])) {
   $tpl = file_get_contents('./assets/index.tpl');
 }else if( isset($config['remote_tpl_allow']) && $config['remote_tpl_allow'] !== '' ){
-  // 尝试获取远程模板
-  $error = 'Fetch remote template file error.';
-  $url = isset($config['remote_tpl_path']) && $config['remote_tpl_path'] !== '' ? $config['remote_tpl_path'].'/'.VERSION.'/'.'index.tpl' : exit($error);
-  $ch = curl_init($url);
-  curl_setopt($ch, CURLOPT_HEADER, FALSE);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-  curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-  $res = curl_exec($ch);
-  $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-  if ($httpCode === 200) {
-    $tpl = $res;
-  }else{
-    exit($error);
+  // 是否从CDN获取模板
+  if( !isset($config['remote_tpl_path_force']) || $config['remote_tpl_path_force'] === '' ){
+    // 从CDN获取远程模板
+    if( isset($config['cdn_remote_tpl_path']) && $config['cdn_remote_tpl_path'] !== '' ){
+      $tpl = fetch_remote_tpl($config['cdn_remote_tpl_path'], $error, TPL_VERSION);
+      // 获取CDN远程模板失败
+      if ($error !== false) {
+        if (IS_CLI) print($error);
+      }
+    }else{
+      // 未设置CDN模板路径
+      $error = 'Failed to generate CDN link.';
+      if (IS_CLI) print($error);
+    }
+  }
+  // 未成功从CDN获取模板，尝试获取远程模板
+  if ($error !== false) {
+    if ( isset($config['remote_tpl_path']) && $config['remote_tpl_path'] !== '' ){
+      $tpl = fetch_remote_tpl($config['remote_tpl_path'], $error, TPL_VERSION);
+      if ($error !== false) {
+        if (IS_CLI) print($error);
+        // 无法获取模板
+        exit($error);
+      }
+    }else {
+      // 未设置远程模板路径
+      exit('Failed to fetch remote template from repo.');
+    }
   }
 }else{
   exit('Template file needed.');
@@ -123,6 +139,15 @@ if (isset($config['akm_text'])) {
   $tpl = str_replace('{{__AKM_TEXT__}}', isset($config['akm_text']) ? $config['akm_text'] : 'file-browser/php-file-browser', $tpl);
 }
 
+// CDN下载基础路径
+if (isset($config['cdn_jsdelivr']) && $config['cdn_jsdelivr'] === '1' && $repo = getenv('FB_CORE_REPO')) {
+  $version = $config['cdn_jsdelivr_version'] ?? 'latest';
+  $tpl = str_replace('{{__REPO__}}', $repo.'@'.$version, $tpl);
+  $tpl = str_replace('{{__ENABLE_CDN__}}', 'true', $tpl);
+}else{
+  $tpl = str_replace('{{__ENABLE_CDN__}}', 'false', $tpl);
+}
+
 // 压缩
 if (isset($config['compress']) && $config['compress'] === '') {
   $tpl = str_replace('{{__AUDIO_DOWNLOAD_BTN__}}', 'false', $tpl);
@@ -146,8 +171,9 @@ if (IS_CLI === FALSE) {
  * @param  string path        不含结尾'/'
  * @param  array  except
  * @param  bool   recurse     是否在递归中
+ * @return array
  */
-function scan($path, $except = [], $recurse = false) {
+function scan(string $path, array $except = [], bool $recurse = false) : array {
   $_dirs = scandir($path);
   $dirs = [];
   foreach ($_dirs as $key => $value) {
@@ -168,4 +194,37 @@ function scan($path, $except = [], $recurse = false) {
   return $dirs;
 }
 
+/**
+ * 获取远程模板
+ * @param  string base_url
+ * @param  string &error
+ * @param  string version
+ * @return string
+ */
+function fetch_remote_tpl(string $base_url, string &$error, string $version = TPL_VERSION) : string {
+  // 初始化模板
+  $tpl = "";
+  // 初始化错误提示：无错误
+  $error = false;
+  $_origin_error = "Fetch remote template file error.";
+  // 初始化模板获取地址
+  $url = $baseurl.'/'.$version.'/'.'index.tpl';
+  // 尝试获取模板
+  $ch = curl_init($url);
+  curl_setopt($ch, CURLOPT_HEADER, FALSE);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+  $res = curl_exec($ch);
+  $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  if ($httpCode === 200) {
+    // 模板获取成功
+    $tpl = $res;
+  }else{
+    // 模板获取失败
+    $error = $_origin_origin_error . "({$httpCode})";
+  }
+  return $tpl;
+}
 ?>

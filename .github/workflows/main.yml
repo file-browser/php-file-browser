@@ -2,9 +2,9 @@ name: Generate Static Files & Deploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, dev ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, dev ]
 
 jobs:
   build:
@@ -30,14 +30,20 @@ jobs:
           FB_TPL_PATH: ${{ secrets.FB_TPL_PATH }}
           FB_REMOTE_TPL_ALLOW: ${{ secrets.FB_REMOTE_TPL_ALLOW }}
           FB_REMOTE_TPL_PATH: ${{ secrets.FB_REMOTE_TPL_PATH }}
+          FB_CDN_REMOTE_TPL_PATH: ${{ secrets.FB_CDN_REMOTE_TPL_PATH }}
+          FB_REMOTE_TPL_PATH_FORCE: ${{ secrets.FB_REMOTE_TPL_PATH_FORCE }}
           FB_STATIC_FILE: ${{ secrets.FB_STATIC_FILE }}
           FB_TITLE: ${{ secrets.FB_TITLE }}
           FB_SUBTITLE_LINK: ${{ secrets.FB_SUBTITLE_LINK }}
           FB_SUBTITLE_TEXT: ${{ secrets.FB_SUBTITLE_TEXT }}
           FB_AKM_LINK: ${{ secrets.FB_AKM_LINK }}
+          FB_AKM_TEXT: ${{ secrets.FB_AKM_TEXT }}
+          FB_CDN_JSDELIVR: ${{ secrets.FB_CDN_JSDELIVR }}
           FB_VIDEO_DONWLOAD_BTN: ${{ secrets.FB_VIDEO_DONWLOAD_BTN }}
           FB_AUDIO_DONWLOAD_BTN: ${{ secrets.FB_AUDIO_DONWLOAD_BTN }}
           FB_COMPRESS: ${{ secrets.FB_COMPRESS }}
+          FB_CORE_REPO: ${{ secrets.GITHUB_REPOSITORY }}
+          FB_CDN_JSDELIVR_VERSION: ${{ secrets.FB_CDN_JSDELIVR_VERSION}}
 
 
 
