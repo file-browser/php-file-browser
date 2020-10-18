@@ -6,7 +6,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/file-browser/php-file-browser?style=flat-square)](https://github.com/file-browser/php-file-browser/issues)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/file-browser/php-file-browser?style=flat-square)
 
-![DEMO](https://cdn.jsdelivr.net/gh/file-browser/pages@latest/demo.png)
+![DEMO](https://cdn.jsdelivr.net/gh/file-browser/pages@latest/demo_2.0.0.png)
 
 ## 特性介绍
 
@@ -23,6 +23,7 @@
 - 支持代码压缩
 - 支持远程模板（仅推荐在静态模式使用）
 - 支持index.html文件保存位置自定义
+- 支持`jsDelivr`加速下载（仅GitHub部署有效）
 
 ## 依赖
 
@@ -68,3 +69,18 @@ VALUE: 欲设置的标题
 - 绑定域名
 - 将该域名设置分支为`gh-pages`
 - 再次触发Deploy即可生效
+
+## 环境变量设置
+
+- 查看`.config`文件中需要修改的配置项
+- 配置项全部大写并加上前缀`FB_`
+- 如`FB_TITLE`
+- 设置环境变量后需要再次运行Action生效
+
+## 版本重大修改说明
+
+### 2.0.0
+
+- 远程模板版本不再与主程序版本一致
+- 远程模板优先使用CDN方式获取
+- **配置文件不兼容1.x.x版本**

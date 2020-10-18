@@ -2,7 +2,7 @@
 <html lang="zh-CN" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>{{__TITLE__}}</title>
+    <title>File Browser</title>
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
@@ -46,23 +46,14 @@
 
     <!-- 下载按钮 -->
     <template id="list_item_download">
-      <a href="javascript:;" class="clipboard" data-clipboard-text="{{__COPY__}}" style="color:#424242">
+      <a href="javascript:;" class="clipboard" data-clipboard-text="{{__COPY__}}">
         <i class="fas fa-copy fa-fw"></i>
       </a>
-      <a href="{{__PATH__}}" target="_blank" download="{{__NAME__}}" style="color:#424242">
+      <a href="{{__PATH__}}" download="{{__NAME__}}">
         <i class="fas fa-download fa-fw"></i>
       </a>
-      {{__CDN_DOWNLOAD__}}
     </template>
     <!-- ./下载按钮 -->
-
-    <!-- CDN下载按钮 -->
-    <template id="list_item_download_cdn">
-      <a href="{{__PATH__}}" target="_blank" download="{{__NAME__}}" style="color:#eb6666">
-        <i class="fas fa-poo-storm fa-fw"></i>
-      </a>
-    </template>
-    <!-- ./CDN下载按钮 -->
 
     <!-- 视频播放按钮 -->
     <template id="list_item_video">
@@ -82,14 +73,14 @@
 
     <!-- 导航 -->
     <template id="nav_item">
-      <a href="javascript:void(0);" onclick="opendir('{{__PATH__}}')" style="font-weight: bold;font-size:14px;">{{__NAME__}}</a>
+      <a href="javascript:void(0);" onclick="opendir('{{__PATH__}}')">{{__NAME__}}</a>
     </template>
     <!-- ./导航 -->
   </head>
   <body>
     <!-- TITLE -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="javascript:void(0);">{{__TITLE__}}</a>
+      <a class="navbar-brand" href="javascript:void(0);">File Browser</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -98,7 +89,7 @@
         <ul class="navbar-nav mr-auto">
         </ul>
         <span class="navbar-text">
-          <a href="{{__SUBTITLE_LINK__}}">{{__SUBTITLE_TEXT__}}</a>
+          <a href="https://github.com/file-browser/php-file-browser">file-browser/php-file-browser</a>
         </span>
       </div>
     </nav>
@@ -111,7 +102,7 @@
       <div class="card my-4">
         <div class="card-body">
           <div id="container">
-            <div id="nav" class="mb-4 breadcrumb"></div>
+            <div id="nav" class="mb-4">当前位置：</div>
             <div id="content">
               <table class="table table-hover">
                 <thead>
@@ -137,10 +128,10 @@
           </div>
           <ul class="list-30">
             <li>
-              项目地址：<a href="{{__AKM_LINK__}}" target="_blank">{{__AKM_TEXT__}}</a>
+              项目地址：<a href="https://github.com/file-browser/php-file-browser" target="_blank">file-browser/php-file-browser</a>
             </li>
             <li>
-              当前版本：<img src="https://img.shields.io/badge/tag-v{{__VERSION__}}-orange"/>
+              当前版本：<img src="https://img.shields.io/badge/tag-v1.4.0-orange"/>
             </li>
             <li>
               最新版本：<img src="https://img.shields.io/github/v/tag/file-browser/php-file-browser?style=flat-square"/>
@@ -196,15 +187,15 @@
     </div>
     <!-- ./Audio Player -->
     <script type="text/javascript">
-      var map = "{{__MAP__}}";
+      var map = "{\"0\":\".config\",\"1\":\".config.example\",\".github\":{\"workflows\":[\"main.yml\"]},\"2\":\".gitignore\",\"3\":\"README.md\",\"assets\":[\"index.tpl\"],\"4\":\"tool.php\"}";
       var nav = '';
       var list;
       var w_path = window.location.hash;
-      var video_download_btn = {{__VIDEO_DOWNLOAD_BTN__}};
-      var audio_download_btn = {{__AUDIO_DOWNLOAD_BTN__}};
+      var video_download_btn = true;
+      var audio_download_btn = true;
       var BASEURL = "";
-      var ENABLE_CDN_JSDELIVR = {{__ENABLE_CDN__}};
-      var CDN_JSDELIVR = "https://cdn.jsdelivr.net/gh/{{__REPO__}}/";
+      var ENABLE_CDN_JSDELIVR = true;
+      var CDN_JSDELIVR = "https://cdn.jsdelivr.net/gh/jokin1999/php-file-browser/";
 
       console.log(map);
 
@@ -243,13 +234,13 @@
         $('#list').html('');
         if (path == '') {
           arr = list;
-          $('#nav').html($('#nav_item').html().replace('{{__NAME__}}', '根目录').replace('{{__PATH__}}', ''));
+          $('#nav').html('当前位置：' + $('#nav_item').html().replace('{{__NAME__}}', '根目录').replace('{{__PATH__}}', ''));
         }else{
           var sp = path.split('/');
           var arr = list;
           var nav_path = '';
           var nav_item = '';
-          $('#nav').html($('#nav_item').html().replace('{{__NAME__}}', '根目录').replace('{{__PATH__}}', ''));
+          $('#nav').html('当前位置：' + $('#nav_item').html().replace('{{__NAME__}}', '根目录').replace('{{__PATH__}}', ''));
           $.each(sp, function(key, value){
             nav_path = (nav_path == '' ? nav_path : nav_path + '/') + value;
             nav_item = '/ ' + value;
@@ -290,15 +281,6 @@
                 download = download.replace(/{{__PATH__}}/g, (path == '' ? './' : './' + path + '/') + value);
                 download = download.replace(/{{__NAME__}}/g, value);
                 tpl = tpl.replace(/{{__DOWNLOAD__}}/g, download);
-                // 增加CDN下载按钮
-                if (ENABLE_CDN_JSDELIVR == true) {
-                  download_cdn = $('#list_item_download_cdn').html();
-                  download_cdn = download_cdn.replace(/{{__PATH__}}/g, CDN_JSDELIVR + (path == '' ? '' : path + '/') + value);
-                  download_cdn = download_cdn.replace(/{{__NAME__}}/g, value);
-                  tpl = tpl.replace(/{{__CDN_DOWNLOAD__}}/g, download_cdn);
-                }else{
-                  tpl = tpl.replace(/{{__CDN_DOWNLOAD__}}/g, '');
-                }
               }else{
                 tpl = tpl.replace(/{{__DOWNLOAD__}}/g, '');
               }
@@ -318,15 +300,6 @@
                 download = download.replace(/{{__PATH__}}/g, (path == '' ? './' : './' + path + '/') + value);
                 download = download.replace(/{{__NAME__}}/g, value);
                 tpl = tpl.replace(/{{__DOWNLOAD__}}/g, download);
-                // 增加CDN下载按钮
-                if (ENABLE_CDN_JSDELIVR == true) {
-                  download_cdn = $('#list_item_download_cdn').html();
-                  download_cdn = download_cdn.replace(/{{__PATH__}}/g, CDN_JSDELIVR + (path == '' ? '' : path + '/') + value);
-                  download_cdn = download_cdn.replace(/{{__NAME__}}/g, value);
-                  tpl = tpl.replace(/{{__CDN_DOWNLOAD__}}/g, download_cdn);
-                }else{
-                  tpl = tpl.replace(/{{__CDN_DOWNLOAD__}}/g, '');
-                }
               }else{
                 tpl = tpl.replace(/{{__DOWNLOAD__}}/g, '');
               }
@@ -340,16 +313,8 @@
               download = download.replace(/{{__PATH__}}/g, (path == '' ? './' : './' + path + '/') + value);
               download = download.replace(/{{__NAME__}}/g, value);
               download = download.replace(/{{__COPY__}}/g, BASEURL + (path == '' ? '' : path + '/') + value);
+              download = download.replace(/{{__JSDELIVR__}}/g, BASEURL + (path == '' ? '' : path + '/') + value);
               tpl = tpl.replace(/{{__DOWNLOAD__}}/g, download);
-              // 增加CDN下载按钮
-              if (ENABLE_CDN_JSDELIVR == true) {
-                download_cdn = $('#list_item_download_cdn').html();
-                download_cdn = download_cdn.replace(/{{__PATH__}}/g, CDN_JSDELIVR + (path == '' ? '' : path + '/') + value);
-                download_cdn = download_cdn.replace(/{{__NAME__}}/g, value);
-                tpl = tpl.replace(/{{__CDN_DOWNLOAD__}}/g, download_cdn);
-              }else{
-                tpl = tpl.replace(/{{__CDN_DOWNLOAD__}}/g, '');
-              }
             }
 
             $('#list').append(tpl);

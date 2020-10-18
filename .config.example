@@ -8,7 +8,7 @@ dir = "."
 
 ; 过滤文件与文件夹
 ; 仅支持根目录排除
-except = assets, .github, index.html, tool.php, map.json, .gitignore, README.md, .config, .config.example
+except = "assets, .github, index.html, tool.php, map.json, .gitignore, README.md, .config, .config.example"
 
 ; 模板设置
 ; 当无法读取本地模板路径时将尝试调用远程模板路径
@@ -20,11 +20,17 @@ tpl_path = "./assets/index.tpl"
 
 ; 是否开启远程模板获取
 ; 远程模板仅作获取，不会保存在本地
-remote_tpl_allow = yes
+remote_tpl_allow = "yes"
 
-; 远程模板基础路径
+; 远程模板
+; 源路径
 ; 实际访问基础路径/[当前版本]/[模板文件].tpl
 remote_tpl_path = "https://raw.githubusercontent.com/file-browser/php-file-browser-templates/master"
+; CDN路径
+cdn_remote_tpl_path = "https://cdn.jsdelivr.net/gh/file-browser/php-file-browser-templates@latest"
+; 强制使用源路径
+; 可选配置：yes, no
+remote_tpl_path_force = "no"
 
 ; 静态文件(index.html)保存位置
 ; 建议与调用位置相对
@@ -36,37 +42,42 @@ static_file = "./index.html"
 [UI]
 
 ; 标题
-title = File Browser
+title = "File Browser"
 
 ; 子标题
-subtitle_link = https://github.com/file-browser/php-file-browser
-subtitle_text = file-browser/php-file-browser
+subtitle_link = "https://github.com/file-browser/php-file-browser"
+subtitle_text = "file-browser/php-file-browser"
 
 ; 关于与鸣谢
-akm_link = https://github.com/file-browser/php-file-browser
-akm_text = file-browser/php-file-browser
+akm_link = "https://github.com/file-browser/php-file-browser"
+akm_text = "file-browser/php-file-browser"
 
-
+; jsDelivr加速
+; 可选配置：yes, no
+cdn_jsdelivr = "yes"
+cdn_jsdelivr_version = "latest"
 
 ; 其他设置
 [Others]
 
 ; 视频下载按钮显示
 ; 可选配置：yes, no
-video_download_btn = yes
+video_download_btn = "yes"
 
 ; 音频下载按钮显示
 ; 可选配置：yes, no
-audio_download_btn = yes
+audio_download_btn = "yes"
 
 ; 压缩页面
 ; 静态模式建议开启
-; 压缩页面不会影响显示效果，仅在运行时消耗少量的性能
-compress = yes
+; 压缩页面不会影响显示效果
+; 可选配置：yes, no
+compress = "yes"
+
 
 ; 核心参数
 ; 请勿修改以下参数，避免出现不可预知的错误
 [Core]
 
 ; 配置文件版本
-cfg_ver = 1
+cfg_ver = 2
