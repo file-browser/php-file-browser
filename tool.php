@@ -229,7 +229,7 @@ function fetch_remote_tpl(string $baseurl, string &$error, string $version = TPL
     $tpl = $res;
   }else{
     // 模板获取失败
-    $error = $_origin_origin_error . "({$httpCode})";
+    $error = $_origin_error . "({$httpCode})";
   }
   return $tpl;
 }
