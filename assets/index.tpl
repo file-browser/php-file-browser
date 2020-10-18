@@ -46,14 +46,23 @@
 
     <!-- 下载按钮 -->
     <template id="list_item_download">
-      <a href="javascript:;" class="clipboard" data-clipboard-text="{{__COPY__}}">
+      <a href="javascript:;" class="clipboard" data-clipboard-text="{{__COPY__}}" style="color:#303030">
         <i class="fas fa-copy fa-fw"></i>
       </a>
-      <a href="{{__PATH__}}" download="{{__NAME__}}">
+      <a href="{{__PATH__}}" target="_blank" download="{{__NAME__}}" style="color:#303030">
         <i class="fas fa-download fa-fw"></i>
       </a>
+      {{__CDN_DOWNLOAD__}}
     </template>
     <!-- ./下载按钮 -->
+
+    <!-- CDN下载按钮 -->
+    <template id="list_item_download_cdn">
+      <a href="{{__PATH__}}" target="_blank" download="{{__NAME__}}" style="color:#eb6666">
+        <i class="fas fa-poo-storm fa-fw"></i>
+      </a>
+    </template>
+    <!-- ./CDN下载按钮 -->
 
     <!-- 视频播放按钮 -->
     <template id="list_item_video">
@@ -194,6 +203,8 @@
       var video_download_btn = {{__VIDEO_DOWNLOAD_BTN__}};
       var audio_download_btn = {{__AUDIO_DOWNLOAD_BTN__}};
       var BASEURL = "";
+      var ENABLE_CDN_JSDELIVR = {{__ENABLE_CDN__}};
+      var CDN_JSDELIVR = "https://cdn.jsdelivr.net/gh/{{__REPO__}}/";
 
       console.log(map);
 
@@ -201,7 +212,7 @@
         // 计算baseurl
         let baseurl = location.href;
         baseurl = baseurl.replace(/[\?|#].+$/, '');
-        BASEURL = baseurl.match(/^.*\//u);
+        BASEURL = baseurl.match(/^.*\//u)[0];
         // map载入
         list = $.parseJSON(map);
         // 打开目录
@@ -312,6 +323,15 @@
               download = download.replace(/{{__NAME__}}/g, value);
               download = download.replace(/{{__COPY__}}/g, BASEURL + (path == '' ? '' : path + '/') + value);
               tpl = tpl.replace(/{{__DOWNLOAD__}}/g, download);
+              if (ENABLE_CDN_JSDELIVR == true) {
+                // 增加CDN下载按钮
+                download_cdn = $('#list_item_download_cdn').html();
+                download_cdn = download_cdn.replace(/{{__PATH__}}/g, CDN_JSDELIVR + (path == '' ? '' : path + '/') + value);
+                download_cdn = download_cdn.replace(/{{__NAME__}}/g, value);
+                tpl = tpl.replace(/{{__CDN_DOWNLOAD__}}/g, download_cdn);
+              }else{
+                tpl = tpl.replace(/{{__CDN_DOWNLOAD__}}/g, '');
+              }
             }
 
             $('#list').append(tpl);
