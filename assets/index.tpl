@@ -46,10 +46,10 @@
 
     <!-- 下载按钮 -->
     <template id="list_item_download">
-      <a href="javascript:;" class="clipboard" data-clipboard-text="{{__COPY__}}" style="color:#303030">
+      <a href="javascript:;" class="clipboard" data-clipboard-text="{{__COPY__}}" style="color:#424242">
         <i class="fas fa-copy fa-fw"></i>
       </a>
-      <a href="{{__PATH__}}" target="_blank" download="{{__NAME__}}" style="color:#303030">
+      <a href="{{__PATH__}}" target="_blank" download="{{__NAME__}}" style="color:#424242">
         <i class="fas fa-download fa-fw"></i>
       </a>
       {{__CDN_DOWNLOAD__}}
@@ -82,7 +82,7 @@
 
     <!-- 导航 -->
     <template id="nav_item">
-      <a href="javascript:void(0);" onclick="opendir('{{__PATH__}}')">{{__NAME__}}</a>
+      <a href="javascript:void(0);" onclick="opendir('{{__PATH__}}')" style="font-weight: bold;font-size:14px;">{{__NAME__}}</a>
     </template>
     <!-- ./导航 -->
   </head>
@@ -111,7 +111,7 @@
       <div class="card my-4">
         <div class="card-body">
           <div id="container">
-            <div id="nav" class="mb-4">当前位置：</div>
+            <div id="nav" class="mb-4 breadcrumb"></div>
             <div id="content">
               <table class="table table-hover">
                 <thead>
@@ -243,13 +243,13 @@
         $('#list').html('');
         if (path == '') {
           arr = list;
-          $('#nav').html('当前位置：' + $('#nav_item').html().replace('{{__NAME__}}', '根目录').replace('{{__PATH__}}', ''));
+          $('#nav').html($('#nav_item').html().replace('{{__NAME__}}', '根目录').replace('{{__PATH__}}', ''));
         }else{
           var sp = path.split('/');
           var arr = list;
           var nav_path = '';
           var nav_item = '';
-          $('#nav').html('当前位置：' + $('#nav_item').html().replace('{{__NAME__}}', '根目录').replace('{{__PATH__}}', ''));
+          $('#nav').html($('#nav_item').html().replace('{{__NAME__}}', '根目录').replace('{{__PATH__}}', ''));
           $.each(sp, function(key, value){
             nav_path = (nav_path == '' ? nav_path : nav_path + '/') + value;
             nav_item = '/ ' + value;
