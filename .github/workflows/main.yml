@@ -35,7 +35,7 @@ jobs:
           FB_VIDEO_DONWLOAD_BTN: ${{ secrets.FB_VIDEO_DONWLOAD_BTN }}
           FB_AUDIO_DONWLOAD_BTN: ${{ secrets.FB_AUDIO_DONWLOAD_BTN }}
           FB_COMPRESS: ${{ secrets.FB_COMPRESS }}
-          FB_CORE_REPO: ${{ secrets.GITHUB_REPOSITORY }}
+          FB_CORE_REPO: ${{ github.repository }}
           FB_CDN_JSDELIVR_VERSION: ${{ secrets.FB_CDN_JSDELIVR_VERSION}}
 
       - name: deploy
