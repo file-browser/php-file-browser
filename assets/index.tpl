@@ -290,6 +290,15 @@
                 download = download.replace(/{{__PATH__}}/g, (path == '' ? './' : './' + path + '/') + value);
                 download = download.replace(/{{__NAME__}}/g, value);
                 tpl = tpl.replace(/{{__DOWNLOAD__}}/g, download);
+                // 增加CDN下载按钮
+                if (ENABLE_CDN_JSDELIVR == true) {
+                  download_cdn = $('#list_item_download_cdn').html();
+                  download_cdn = download_cdn.replace(/{{__PATH__}}/g, CDN_JSDELIVR + (path == '' ? '' : path + '/') + value);
+                  download_cdn = download_cdn.replace(/{{__NAME__}}/g, value);
+                  tpl = tpl.replace(/{{__CDN_DOWNLOAD__}}/g, download_cdn);
+                }else{
+                  tpl = tpl.replace(/{{__CDN_DOWNLOAD__}}/g, '');
+                }
               }else{
                 tpl = tpl.replace(/{{__DOWNLOAD__}}/g, '');
               }
@@ -309,6 +318,15 @@
                 download = download.replace(/{{__PATH__}}/g, (path == '' ? './' : './' + path + '/') + value);
                 download = download.replace(/{{__NAME__}}/g, value);
                 tpl = tpl.replace(/{{__DOWNLOAD__}}/g, download);
+                // 增加CDN下载按钮
+                if (ENABLE_CDN_JSDELIVR == true) {
+                  download_cdn = $('#list_item_download_cdn').html();
+                  download_cdn = download_cdn.replace(/{{__PATH__}}/g, CDN_JSDELIVR + (path == '' ? '' : path + '/') + value);
+                  download_cdn = download_cdn.replace(/{{__NAME__}}/g, value);
+                  tpl = tpl.replace(/{{__CDN_DOWNLOAD__}}/g, download_cdn);
+                }else{
+                  tpl = tpl.replace(/{{__CDN_DOWNLOAD__}}/g, '');
+                }
               }else{
                 tpl = tpl.replace(/{{__DOWNLOAD__}}/g, '');
               }
@@ -323,8 +341,8 @@
               download = download.replace(/{{__NAME__}}/g, value);
               download = download.replace(/{{__COPY__}}/g, BASEURL + (path == '' ? '' : path + '/') + value);
               tpl = tpl.replace(/{{__DOWNLOAD__}}/g, download);
+              // 增加CDN下载按钮
               if (ENABLE_CDN_JSDELIVR == true) {
-                // 增加CDN下载按钮
                 download_cdn = $('#list_item_download_cdn').html();
                 download_cdn = download_cdn.replace(/{{__PATH__}}/g, CDN_JSDELIVR + (path == '' ? '' : path + '/') + value);
                 download_cdn = download_cdn.replace(/{{__NAME__}}/g, value);

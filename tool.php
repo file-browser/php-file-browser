@@ -204,6 +204,7 @@ function scan(string $path, array $except = [], bool $recurse = false) : array {
  * @return string
  */
 function fetch_remote_tpl(string $baseurl, string &$error, string $version = TPL_VERSION) : string {
+  print("Fetching remote template from: " . $baseurl);
   // 初始化模板
   $tpl = "";
   // 初始化错误提示：无错误

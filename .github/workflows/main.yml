@@ -17,13 +17,6 @@ jobs:
 
       - name: build
         run: php tool.php
-
-      - name: deploy
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: .
         env:
           FB_DIR: ${{ secrets.FB_DIR }}
           FB_EXCEPT: ${{ secrets.FB_EXCEPT }}
@@ -44,6 +37,13 @@ jobs:
           FB_COMPRESS: ${{ secrets.FB_COMPRESS }}
           FB_CORE_REPO: ${{ secrets.GITHUB_REPOSITORY }}
           FB_CDN_JSDELIVR_VERSION: ${{ secrets.FB_CDN_JSDELIVR_VERSION}}
+
+      - name: deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: .
 
 
 
